@@ -1,5 +1,7 @@
 import { productManager_app } from "../app.js";
 import { Router } from "express";
+import { productModel } from "../dao/models/products.model.js";
+import mongoose from "mongoose";
 const router = Router();
 
 router.get("/", async (req, res) => {
@@ -38,7 +40,7 @@ router.get("/:pid", async (req, res) => {
     }
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
     const {
         title,
         description,
@@ -54,20 +56,27 @@ router.post("/", (req, res) => {
         return res.status(400).json({ error: "Campos obligatorios faltantes" });
     }
 
-    const productData = {
-        title,
-        description,
-        code,
-        price,
-        status: status || true,
-        stock,
-        category,
-        thumbnails: thumbnails || [],
-    };
+    try {
+        let productData = await productModel.create({
+            title,
+            description,
+            code,
+            price,
+            status, // status || true,
+            stock,
+            category,
+            thumbnails, // thumbnails || [],
+        });
+        res.send({ status: "success", payload: productData });
 
-    productManager_app.addProduct(productData);
-
-    return res.status(201).json({ message: "Producto agregado con éxito." });
+        await productManager_app.addProduct(productData);
+        // return res
+        //     .status(201)
+        //     .json({ message: "Producto agregado con éxito." });
+    } catch (error) {
+        console.error("Error al agregar un producto:", error);
+        res.status(500).json({ error: "Error al agregar un producto." });
+    }
 });
 
 router.put("/:pid", async (req, res) => {

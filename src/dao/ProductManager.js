@@ -111,8 +111,8 @@ class ProductManager {
                 this.path,
                 JSON.stringify(products, null, 2)
             );
-        } catch {
-            console.error("Error al escribir el archivo.");
+        } catch (error) {
+            console.error("Error al escribir el archivo.", error.message);
         }
     }
 }

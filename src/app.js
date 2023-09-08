@@ -4,12 +4,13 @@ import express from "express";
 import handlebars from "express-handlebars";
 import { Server } from "socket.io";
 import { createServer } from "http";
-import ProductManager from "./components/ProductManager.js";
-import CartManager from "./components/CartManager.js";
+import ProductManager from "./dao/ProductManager.js";
+import CartManager from "./dao/CartManager.js";
 import createProductsFile from "./utils/createProductsFile.js";
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
 import viewsRouter from "./routes/views.router.js";
+import mongoose from "mongoose";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
@@ -18,13 +19,16 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 export const productManager_app = new ProductManager(
-    `${__dirname}/components/products.json`
+    `${__dirname}/dao/products.json`
 );
-export const cartManager_app = new CartManager(
-    `${__dirname}/components/carts.json`
-);
+export const cartManager_app = new CartManager(`${__dirname}/dao/carts.json`);
 
 createProductsFile(productManager_app);
+
+// Configuración de mongoose
+mongoose.connect(
+    "mongodb+srv://CoderUser:00UIDh6iSAQPHj28@ecommerce.dn98uin.mongodb.net/?retryWrites=true&w=majority"
+);
 
 // Configuración de Express
 app.engine("handlebars", handlebars.engine());
