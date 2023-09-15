@@ -1,116 +1,125 @@
-<div class="container-fluid">
-  <div class="row">
-    <h1 class="text-center fw-bold text-dark mt-4">Real Time Products</h1>
-    <div class="col-12 col-md-6">
-      <div class="p-4" id="formAdd">
-        <h3 class="fw-bold text-dark mt-4">Add New Product</h3>
-        <div class="mb-3">
-          <label class="form-label">Title</label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Title of the product"
-            name="title"
-            id="title"
-          />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Description</label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Description of the product"
-            name="description"
-            id="description"
-          />
-        </div>
-        <div class="mb-3">
-          <div class="col-6">
-            <label class="form-label">Price</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Price of the product"
-              name="price"
-              id="price"
-            />
-          </div>
-          <div class="col-6">
-            <label class="form-label">Code</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Unique id CODE of the product"
-              name="code"
-              id="code"
-            />
-          </div>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Image</label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Link of the image"
-            name="thumbnails"
-            id="thumbnails"
-          />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Stock</label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Stock of the product"
-            name="stock"
-            id="stock"
-          />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Category</label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Category of the product"
-            name="category"
-            id="category"
-          />
-        </div>
-        <input
-          type="button"
-          class="btn btn-success"
-          value="Add Product (+)"
-          id="btnAddProduct"
-        />
-      </div>
-    </div>
-    <div class="col-12 col-md-6">
-      <div class="p-4" id="formDelete">
-        <h3 class="fw-bold text-dark mt-4">Delete Product</h3>
-        <div class="mb-3">
-          <label class="form-label">Delete Product by ID</label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Id of the product"
-            name="id"
-            id="inputDeleteId"
-          />
-        </div>
-        <input
-          type="button"
-          class="btn btn-danger"
-          value="Delete Product (-)"
-          id="btnDeleteProduct"
-        />
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col" id="srvResponse"></div>
-  </div>
+<div>
+    <h1>
+        {{title}}
+    </h1>
 </div>
-  </div>
+<div>
+    {{#if products.length}}
+        <table id="productsTable">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Code</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Thumbnail</th>
+                </tr>
+            </thead>
+            {{#each products}}
+                <tbody>
+                    <tr>
+                        <td>{{this.id}}</td>
+                        <td>{{this.title}}</td>
+                        <td>{{this.price}}</td>
+                        <td>{{this.code}}</td>
+                        <td>{{this.stock}}</td>
+                        <td>{{this.category}}</td>
+                        <td>{{this.description}}</td>
+                        <td>{{this.status}}</td>
+                        <td><img
+                                src="{{this.thumbnail}}"
+                                alt="imagen del producto"
+                            /></td>
+                    </tr>
+                </tbody>
+            {{/each}}
+        </table>
+    {{else}}
+        <h3>No hay productos agregados!</h3>
+    {{/if}}
+</div>
+<div>
+    <div>
+        <form id="formDelete">
+            <h3 class="mb-5">Delete a Product</h3>
+            <input
+                type="number"
+                required
+                id="deleteProd"
+                name="deleteProd"
+                placeholder="Ingrese el id"
+            />
+            <input type="submit" value="Eliminar" />
+        </form>
+    </div>
+    <div>
+        <form
+            id="addProduct"
+            method="POST"
+            action="/realTimeProducts"
+            enctype="multipart/form-data"
+        >
+            <h3>Add a Product</h3>
+            <input
+                type="text"
+                required
+                id="title"
+                name="title"
+                placeholder="Ingrese el nombre"
+            />
+            <input
+                type="number"
+                required
+                id="price"
+                name="price"
+                placeholder="Ingrese el precio"
+            />
+            <input
+                type="text"
+                required
+                id="code"
+                name="code"
+                placeholder="Ingrese el code"
+            />
+            <input
+                type="number"
+                required
+                id="stock"
+                name="stock"
+                placeholder="Ingrese el stock"
+            />
+            <input
+                type="text"
+                required
+                id="category"
+                name="categoty"
+                placeholder="Ingrese la categoria"
+            />
+            <input
+                type="text"
+                required
+                id="description"
+                name="description"
+                placeholder="Ingrese la descripcion"
+            />
+            <label class="switch">
+                <input type="checkbox" name="status" id="status" value="true" />
+                <span></span>
+            </label>
+            Status
+            <input
+                type="file"
+                name="thumbnail"
+                id="thumbnail"
+                placeholder="Ingrese imagen"
+            /><br />
+            <input type="submit" value="Cargar" />
+        </form>
+    </div>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>

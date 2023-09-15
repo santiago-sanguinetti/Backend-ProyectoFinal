@@ -98,23 +98,5 @@
     "status": 25,
     "stock": "Sin categoria",
     "category": "Sin imagen"
-  },
-  {
-    "id": 11,
-    "title": {
-      "title": "Prueba1",
-      "description": "Desc",
-      "code": "P1",
-      "price": 50,
-      "status": true,
-      "stock": 25,
-      "category": "Prueba",
-      "thumbnails": [
-        "url1",
-        "url2"
-      ],
-      "_id": "64fa4d12baa6a3bb0ab4caa5",
-      "__v": 0
-    }
   }
 ]

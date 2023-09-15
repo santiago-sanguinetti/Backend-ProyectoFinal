@@ -1,16 +1,28 @@
-<div class="container">
-  <h1 class="text-center">Products List</h1>
-  <div class="row">
-    {{#each products}}
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <img src="{{this.thumbnails}}" class="card-img-top" alt="{{this.title}}">
-          <div class="card-body">
-            <h5 class="card-title">{{this.title}}</h5>
-            <p class="card-text">Code: {{this.code}}</p>
-          </div>
-        </div>
-      </div>
-    {{/each}}
-  </div>
+<div>
+    <h1>
+        {{title}}
+    </h1>
+</div>
+<div>
+    {{#if products.length}}
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Image</th>
+            </tr>
+            {{#each products}}
+                <tr>
+                    <td>{{this.title}}</td>
+                    <td>{{this.price}}</td>
+                    <td><img
+                            src="{{this.thumbnail}}"
+                            alt="imagen del producto"
+                        /></td>
+                </tr>
+            {{/each}}
+        </table>
+    {{else}}
+        <h3>No hay productos agregados!</h3>
+    {{/if}}
 </div>

@@ -1,16 +1,95 @@
 import { Router } from "express";
-import { productManager_app } from "../app.js";
+import productManager from "../dao/mongo/managers/productManager.js";
+import cartManager from "../dao/mongo/managers/cartManager.js";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-    const products = await productManager_app.getProducts();
-    res.render("home", { products, title: "Home" });
+router.get("/products", async (req, res) => {
+    const {
+        limit = 10,
+        page = 1,
+        sort = "asc",
+        title = "",
+        category = "",
+    } = req.query;
+    const products = await productManager.getAllPaginated(
+        limit,
+        page,
+        sort,
+        title,
+        category
+    );
+    try {
+        products.docs = await products.docs.map((product) => {
+            const {
+                _id,
+                title,
+                description,
+                price,
+                code,
+                stock,
+                category,
+                thumbnail,
+            } = product;
+            return {
+                id: _id,
+                title,
+                description,
+                price,
+                code,
+                stock,
+                category,
+                thumbnail,
+            };
+        });
+        const info = {
+            totalPages: products.totalPages,
+            prevPage: products.prevPage,
+            nextPage: products.nextPage,
+            page: products.page,
+            hasPrevPage: products.hasPrevPage,
+            hasNextPage: products.hasNextPage,
+            prevLink: products.hasPrevPage
+                ? `http://localhost:8080/products?page=${products.prevPage}`
+                : null,
+            nextLink: products.hasNextPage
+                ? `http://localhost:8080/products?page=${products.nextPage}`
+                : null,
+        };
+        const productsList = products.docs;
+        const { hasPrevPage, hasNextPage, page, prevLink, nextLink } = info;
+        res.render("products", {
+            style: "products.css",
+            productsList,
+            hasPrevPage,
+            hasNextPage,
+            page,
+            prevLink,
+            nextLink,
+        });
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send({
+            status: "error",
+            error: "Error getting all products",
+        });
+    }
 });
-
-router.get("/realtimeproducts", async (req, res) => {
-    const products = await productManager_app.getProducts();
-    res.render("realTimeProducts", { products, title: "Real Time Products" });
+router.get("/carts", async (req, res) => {
+    res.render("carts", {
+        style: "carts.css",
+        title: "Carts",
+    });
+});
+router.get("/carts/:cid", async (req, res) => {
+    const { cid } = req.params;
+    const cart = await cartManager.getById(cid);
+    const cartsProducts = cart.products;
+    res.render("cartsId", {
+        style: "cartId.css",
+        title: "CartsId",
+        cartsProducts,
+    });
 });
 
 export default router;
