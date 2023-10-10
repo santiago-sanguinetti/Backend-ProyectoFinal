@@ -3,15 +3,20 @@
 
 El proyecto ahora incluye las siguientes funcionalidades:
 
-- Registro e inicio de sesión de usuarios mediante passport.
-- Inicio de sesión de usuarios mediante GitHub.
-- Sistema de roles con validación interna en el código para el administrador.
+- Los usuarios ahora tienen un carrito vinculado a su cuenta al registrarse.
+- Endpoint `/api/sessions/current` devuelve el usuario autenticado.
+
+## Corrección de errores
+
+Se realizaron los siguientes cambios:
+
+- Ahora la validación para el usuario administrador se realiza a partir del email y no del _id.
 
 ## Uso
 
 1. Descarga o clona este repositorio a tu máquina local:
    ```bash
-   git clone -b entrega/clase_21 https://github.com/santiago-sanguinetti/Backend-ProyectoFinal.git
+   git clone -b practica_integradora_2 https://github.com/santiago-sanguinetti/Backend-ProyectoFinal.git
    ```
 2. Abre una terminal en la ubicación del repositorio clonado.
    
